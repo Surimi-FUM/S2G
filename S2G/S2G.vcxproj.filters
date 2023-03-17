@@ -780,5 +780,14 @@
     <ClInclude Include="map_class.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="player_class.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy_class.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMaster.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

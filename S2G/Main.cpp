@@ -5,36 +5,65 @@
 */
 # include <Siv3D.hpp> // OpenSiv3D v0.6.6
 #include "map_class.h"
+#include "player_class.h"
+#include "enemy_class.h"
+#include "GameMaster.h"
 
 void Main()
 {
 	// ウィンドウを 640x480 にリサイズする
 	Window::Resize(640, 480);
 
-	std::string csv_path = "maps/csv/map1.csv";
+	GameMaster game_master = GameMaster();
 
+	std::string csv_path = "maps/csv/map1.csv";
 	Map map = Map(csv_path);
+
+	std::pair<int, int> player_pos = map.GetPos("start");
+	Player player = Player(player_pos);
+
+	std::vector<Enemy> enemies;
+	for (int i = 0; i < map.GetNumEnemies(); i++) {
+		std::pair<int, int> enemy_pos = map.GetPos("enemy", i);
+		Enemy enemy = Enemy(enemy_pos);
+		enemies.push_back(enemy);
+	}
+
+	map.ShowConsole(player_pos, enemies);
 
 	bool flag_show = false;
 
-	map.DebugConsole();
-
 	while (System::Update())
 	{
-		if (map.CheckClear() || map.CheckOver())
+		player_pos = player.GetPos();
+		if (map.CheckClear(player_pos) || game_master.ChceckCollisionP_E(player_pos, enemies))
 			break;
 
-		if (KeyLeft.down())
-			map.MovePlayer(1, "Left");
+		if (KeyLeft.down()) {
+			player.Move(1, "Left", map);
+			flag_show = true;
+		}
 
-		if (KeyRight.down())
-			map.MovePlayer(1, "Right");
+		if (KeyRight.down()) {
+			player.Move(1, "Right", map);
+			flag_show = true;
+		}
 
-		if (KeyUp.down())
-			map.MovePlayer(1, "Up");
+		if (KeyUp.down()) {
+			player.Move(1, "Up", map);
+			flag_show = true;
+		}
 
-		if (KeyDown.down())
-			map.MovePlayer(1, "Down");
+		if (KeyDown.down()) {
+			player.Move(1, "Down", map);
+			flag_show = true;
+		}
+
+		if (flag_show) {
+			std::pair<int, int> player_pos = player.GetPos();
+			map.ShowConsole(player_pos, enemies);
+			flag_show = false;
+		}
 	}
 }
 

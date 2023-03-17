@@ -314,7 +314,10 @@
     <Xml Include="App\example\xml\test.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="enemy_class.h" />
+    <ClInclude Include="GameMaster.h" />
     <ClInclude Include="map_class.h" />
+    <ClInclude Include="player_class.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
