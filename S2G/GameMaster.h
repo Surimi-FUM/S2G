@@ -5,10 +5,10 @@
 
 class GameMaster {
 public:
-	bool ChceckCollisionP_E(std::pair<int, int>& player_pos, std::vector<Enemy>& enemies) {
-		for (Enemy enem : enemies) {
-			std::pair<int, int> enemy_pos = enem.GetPos();
-			if (player_pos == enemy_pos)
+	bool ChceckCollisionP_E(std::pair<int, int>& player_pos, std::map<std::string, std::pair<int, int>>& e_pos_map) {
+		for (auto e_pos : e_pos_map) {
+			std::pair<int, int> pos = e_pos.second;
+			if (player_pos == pos)
 				return true;
 		}
 		return false;

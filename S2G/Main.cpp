@@ -22,21 +22,25 @@ void Main()
 	std::pair<int, int> player_pos = map.GetPos("start");
 	Player player = Player(player_pos);
 
-	std::vector<Enemy> enemies;
-	for (int i = 0; i < map.GetNumEnemies(); i++) {
-		std::pair<int, int> enemy_pos = map.GetPos("enemy", i);
-		Enemy enemy = Enemy(enemy_pos);
-		enemies.push_back(enemy);
-	}
+	std::map<std::string, std::pair<int, int>> enemy_poses;
+	std::string enemy_move_path = "enemy_move1.csv";
+	std::pair<int, int> enemy_pos = map.GetPos("enemy", 0);
+	enemy_poses["A_1"] = enemy_pos;
+	Enemy enemy_1 = Enemy(enemy_pos);
+	enemy_1.SetMoveQueue(enemy_move_path, "1");
 
-	map.ShowConsole(player_pos, enemies);
+	enemy_pos = map.GetPos("enemy", 1);
+	enemy_poses["A_2"] = enemy_pos;
+	Enemy enemy_2 = Enemy(enemy_pos);
+	enemy_2.SetMoveQueue(enemy_move_path, "2");
+
+	map.ShowConsole(player_pos, enemy_poses);
 
 	bool flag_show = false;
 
 	while (System::Update())
 	{
-		player_pos = player.GetPos();
-		if (map.CheckClear(player_pos) || game_master.ChceckCollisionP_E(player_pos, enemies))
+		if (map.CheckClear(player_pos))
 			break;
 
 		if (KeyLeft.down()) {
@@ -60,8 +64,18 @@ void Main()
 		}
 
 		if (flag_show) {
-			std::pair<int, int> player_pos = player.GetPos();
-			map.ShowConsole(player_pos, enemies);
+			player_pos = player.GetPos();
+			enemy_pos = enemy_1.GetPos();
+
+			if (game_master.ChceckCollisionP_E(player_pos, enemy_poses))
+				break;
+			enemy_1.Move();
+			enemy_2.Move();
+			enemy_pos = enemy_1.GetPos();
+			enemy_poses["A_1"] = enemy_pos;
+			enemy_pos = enemy_2.GetPos();
+			enemy_poses["A_2"] = enemy_pos;
+			map.ShowConsole(player_pos, enemy_poses);
 			flag_show = false;
 		}
 	}

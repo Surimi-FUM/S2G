@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <fstream>
 #include <sstream>
+#include "enemy_class.h"
 
 class Map {
 	std::vector<std::vector<int>> map;
@@ -93,9 +94,15 @@ public:
 		return false;
 	}
 
-	void ShowConsole(std::pair<int, int> &p_pos, auto &enemies) {
-		Print << p_pos.first;
-		Print << p_pos.second;
+	void ShowConsole(std::pair<int, int> &p_pos, std::map<std::string, std::pair<int, int>> &e_pos_map) {
+		Print << U"P [Show]: " << p_pos.first << U", " << p_pos.second;
+		for (auto e_pos : e_pos_map) {
+			std::string key = e_pos.first;
+			const String key_str = Unicode::Widen(key);
+			std::pair<int, int> val = e_pos.second;
+			Print << key_str << U" [Show]: " << val.first << U", " << val.second;
+		}
+
 		int i = 0;
 
 		for (auto vec : map) {
@@ -120,14 +127,13 @@ public:
 					str += "p";
 				}
 
-				for (auto enemy : enemies) {
-					std::pair<int, int> e_pos = enemy.GetPos();
-					if (i == e_pos.first && j == e_pos.second) {
+				for (auto e_pos : e_pos_map) {
+					std::pair<int, int> val = e_pos.second;
+					if (i == val.first && j == val.second) {
 						str.pop_back();
 						str += "e";
 					}
 				}
-
 				j++;
 			}
 			const String text = Unicode::Widen(str);
