@@ -120,6 +120,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="App\pictures\b_enemy.png" />
+    <Image Include="App\pictures\b_cat.png" />
+    <Image Include="App\maps\mapchip\base.png" />
     <Image Include="App\engine\texture\box-shadow\128.png" />
     <Image Include="App\engine\texture\box-shadow\16.png" />
     <Image Include="App\engine\texture\box-shadow\256.png" />
@@ -144,6 +147,7 @@
     <Image Include="App\example\texture\wood.jpg" />
     <Image Include="App\example\windmill.png" />
     <Image Include="App\icon.ico" />
+    <Image Include="App\pictures\dark_siv3dkun.png" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="App\Resource.rc" />
@@ -317,6 +321,7 @@
   <ItemGroup>
     <ClInclude Include="enemy_class.h" />
     <ClInclude Include="GameMaster.h" />
+    <ClInclude Include="mapchip_class.h" />
     <ClInclude Include="map_class.h" />
     <ClInclude Include="player_class.h" />
     <ClInclude Include="stdafx.h" />
