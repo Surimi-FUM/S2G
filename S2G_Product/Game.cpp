@@ -36,8 +36,12 @@ Game::Game(const InitData& init)
 
 void Game::update()
 {
-	if (map.CheckClear(player_pos))
+	audio.play();
+
+	if (map.CheckClear(player_pos)) {
+		audio.pause(2s);
 		changeScene(State::Clear);
+	}
 
 	if (KeyLeft.down()) {
 		player.Move(1, "Left", map);
@@ -85,6 +89,8 @@ void Game::update()
 
 void Game::draw() const
 {
+	audio.setVolume(0.5);
+
 	// レンダーテクスチャを黒でクリア
 	renderTexture.clear(ColorF{ 0.0,1.0 });
 

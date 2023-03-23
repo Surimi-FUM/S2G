@@ -32,6 +32,8 @@ class Game : public App::Scene{
 
 	bool flag_eMove = false;
 
+	// BGM
+	const Audio audio{ Audio::Stream, U"music/MusMus-BGM-112.mp3", Loop::Yes };
 
 public:
 

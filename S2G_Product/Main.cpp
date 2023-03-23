@@ -14,6 +14,8 @@ void Main()
 	manager.add<Game>(State::Game);
 	manager.add<Clear>(State::Clear);
 
+	//manager.init(State::Clear);
+
 	while (System::Update())
 	{
 		if (not manager.update())

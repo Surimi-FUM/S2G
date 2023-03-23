@@ -245,6 +245,15 @@
     <Image Include="App\maps\mapchip\base.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="App\pictures\clear_image.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="App\pictures\pipo-bg005a.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="App\pictures\pipo-pic001.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="App\Resource.rc">
@@ -772,6 +781,9 @@
     <Media Include="App\example\shot.mp3">
       <Filter>Resource Files\example</Filter>
     </Media>
+    <Media Include="App\music\MusMus-BGM-104.mp3" />
+    <Media Include="App\music\MusMus-BGM-112.mp3" />
+    <Media Include="App\music\MusMus-BGM-157.mp3" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="App\example\font\DotGothic16\DotGothic16-Regular.ttf">
