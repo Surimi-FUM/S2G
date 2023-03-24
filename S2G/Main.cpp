@@ -56,6 +56,10 @@ void Main()
 
 	// ヒートマップ
 	HeatMap heatmap = HeatMap(map);
+	heatmap.CoolHeatMap();
+	heatmap.CalcHeatMap(player_pos, player.GetTemp(), player.GetTempDistance());
+	heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+	heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
 
 	bool flag_eMove = false;
 
@@ -84,6 +88,59 @@ void Main()
 			flag_eMove = true;
 		}
 
+		// 蓄積時間が出現間隔を超えたら敵が行動する
+		enemy_1.AddAccumulator(Scene::DeltaTime());
+		enemy_2.AddAccumulator(Scene::DeltaTime());
+
+		if (enemy_1.CanMove())
+		{
+			enemy_pos = enemy_1.GetPos();
+
+			if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
+				heatmap.RestHeatMap();
+				heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+				heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
+				player_pos = map.GetPos("start");
+				player.SetPos(player_pos);
+			}
+			enemy_1.MoveQueue();
+			enemy_pos = enemy_1.GetPos();
+			enemy_poses["A_1"] = enemy_pos;
+
+			if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
+				heatmap.RestHeatMap();
+				heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+				heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
+				player_pos = map.GetPos("start");
+				player.SetPos(player_pos);
+			}
+		}
+
+		if (enemy_2.CanMove())
+		{
+			enemy_pos = enemy_2.GetPos();
+
+			if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
+				heatmap.RestHeatMap();
+				heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+				heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
+				player_pos = map.GetPos("start");
+				player.SetPos(player_pos);
+			}
+
+			enemy_2.MoveHeatMap(heatmap, map);
+			enemy_pos = enemy_2.GetPos();
+			enemy_poses["A_2"] = enemy_pos;
+
+			if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
+				heatmap.RestHeatMap();
+				heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+				heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
+				player_pos = map.GetPos("start");
+				player.SetPos(player_pos);
+			}
+		}
+
 		if (flag_eMove) {
 			player_pos = player.GetPos();
 
@@ -92,24 +149,6 @@ void Main()
 			heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
 			heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
 			heatmap.DebugConsole();
-
-			enemy_pos = enemy_1.GetPos();
-
-			if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
-				player_pos = map.GetPos("start");
-				player.SetPos(player_pos);
-			}
-			enemy_1.Move();
-			enemy_2.Move();
-			enemy_pos = enemy_1.GetPos();
-			enemy_poses["A_1"] = enemy_pos;
-			enemy_pos = enemy_2.GetPos();
-			enemy_poses["A_2"] = enemy_pos;
-
-			if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
-				player_pos = map.GetPos("start");
-				player.SetPos(player_pos);
-			}
 
 			flag_eMove = false;
 		}

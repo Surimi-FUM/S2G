@@ -35,8 +35,28 @@ class HeatMap {
 		}
 	}
 
+	void ColdHeatMap(int32 x, int32 y) {
+		int32 cold_temp = -1, max_cold = 0;
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				if (i == 0 && j == 0)
+					continue;
+
+				cold_temp = heatmap.at(y + i).at(x + j);
+				if (cold_temp < max_cold)
+					max_cold = cold_temp;
+
+				cold_temp = heatmap.at(y - i).at(x - j);
+				if (cold_temp < max_cold)
+					max_cold = cold_temp;
+			}
+		}
+		heatmap.at(y).at(x) += max_cold;
+	}
+
 	void UpdateHeatMap(int32 x, int32 y, int32 temp, std::queue<std::pair<int32, int32>> &h_queue, std::vector<bool> &v_cell) {
 		std::pair<int32, int32> next_pos;
+		int32 cold_temp = -1, max_cold = 0;
 
 		if (temp == 0)
 			temp = 1;
@@ -46,6 +66,17 @@ class HeatMap {
 			h_queue.push(next_pos);
 			v_cell.at(x * y) = true;
 			heatmap.at(y).at(x) = temp;
+
+			ColdHeatMap(x, y);
+
+			if (heatmap.at(y).at(x) < -5)
+				heatmap.at(y).at(x) = -5;
+
+			if (heatmap.at(y).at(x) > 5)
+				heatmap.at(y).at(x) = 5;
+
+			if (heatmap.at(y).at(x) == 0)
+				heatmap.at(y).at(x) = -1;
 		}
 	}
 
@@ -60,6 +91,10 @@ public:
 
 	int32 GetCellTemp(std::pair<int, int>& pair) {
 		return heatmap.at(pair.first).at(pair.second);
+	}
+
+	int32 GetCellTemp(int32 y, int32 x) {
+		return heatmap.at(y).at(x);
 	}
 
 	int32 GetTempVal(std::string str) {
@@ -77,6 +112,18 @@ public:
 
 				if (heatmap.at(i).at(j) < 0)
 					heatmap.at(i).at(j)++;
+			}
+		}
+	}
+
+	void RestHeatMap() {
+		for (int32 i = 0; i < map_size.first; i++) {
+			for (int32 j = 0; j < map_size.second; j++) {
+				if (heatmap.at(i).at(j) == 0 || heatmap.at(i).at(j) == 1)
+					continue;
+
+				if (heatmap.at(i).at(j) != 0)
+					heatmap.at(i).at(j) = 1;
 			}
 		}
 	}
