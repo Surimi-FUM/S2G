@@ -321,6 +321,7 @@
   <ItemGroup>
     <ClInclude Include="enemy_class.h" />
     <ClInclude Include="GameMaster.h" />
+    <ClInclude Include="heatmap_class.h" />
     <ClInclude Include="mapchip_class.h" />
     <ClInclude Include="map_class.h" />
     <ClInclude Include="player_class.h" />

@@ -9,6 +9,7 @@
 #include "enemy_class.h"
 #include "GameMaster.h"
 #include "mapchip_class.h"
+#include "heatmap_class.h"
 
 void Main()
 {
@@ -53,6 +54,9 @@ void Main()
 	// マップを 320x240 のレンダーテクスチャに描画し、それを最終的に 2 倍サイズで描画する
 	RenderTexture renderTexture{ 320, 240 };
 
+	// ヒートマップ
+	HeatMap heatmap = HeatMap(map);
+
 	bool flag_eMove = false;
 
 	while (System::Update())
@@ -82,6 +86,13 @@ void Main()
 
 		if (flag_eMove) {
 			player_pos = player.GetPos();
+
+			heatmap.CoolHeatMap();
+			heatmap.CalcHeatMap(player_pos, player.GetTemp(), player.GetTempDistance());
+			heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+			heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
+			heatmap.DebugConsole();
+
 			enemy_pos = enemy_1.GetPos();
 
 			if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
@@ -109,6 +120,10 @@ void Main()
 		// レンダーテクスチャを黒でクリア
 		renderTexture.clear(ColorF{ 0.0,1.0 });
 
+		// スペースキーを押すとヒートマップを表示する
+		const bool showHeatmap = KeySpace.pressed();
+
+
 		{
 			// renderTexture を描画先として設定
 			const ScopedRenderTarget2D rt{ renderTexture };
@@ -133,6 +148,17 @@ void Main()
 
 					if (map.GetMapCell(cell) == map.GetMapVal("s"))
 						mapchip.GetChip_Map(7, 13).draw(pos);
+
+					// 通行可能判定
+					if (showHeatmap) // 通行不能な場合
+					{
+						// 半透明な正方形を描く
+						double temp = heatmap.GetCellTemp(cell);
+						if(temp >= 0)
+							Rect{ pos, mapchip.GetMapChipSize() }.draw(ColorF{ 1 - (1 / temp), 0, 0, 0.4});
+						else
+							Rect{ pos, mapchip.GetMapChipSize() }.draw(ColorF{ 0, 0, 1 - (1 / temp), 0.4});
+					}
 				}
 			}
 

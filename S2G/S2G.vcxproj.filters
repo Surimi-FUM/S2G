@@ -805,5 +805,8 @@
     <ClInclude Include="mapchip_class.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="heatmap_class.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

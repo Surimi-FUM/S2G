@@ -2,6 +2,8 @@
 
 class Player {
 	std::pair<int, int> player_pos;
+	int32 temp = 5;
+	int32 temp_distance = 5;
 
 	bool CheckMove(int cell, int wall) {
 		if (cell == wall)
@@ -12,6 +14,14 @@ class Player {
 public:
 	Player(std::pair<int, int> &p_pos) {
 		player_pos = p_pos;
+	}
+
+	int32 GetTemp() {
+		return temp;
+	}
+
+	int32 GetTempDistance() {
+		return temp_distance;
 	}
 
 	void Move(int step, std::string dir, auto &map) {
