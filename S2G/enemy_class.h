@@ -9,6 +9,10 @@ class Enemy {
 		{"u", 2},
 		{"d", 3},
 	};
+	// 行動間隔（秒）
+	double spawn_time = 1.0;
+	// 蓄積された時間（秒）
+	double accumulator = 0.0;
 
 	bool CheckMove(int cell, int wall) {
 		if (cell == wall)
@@ -48,11 +52,27 @@ public:
 		return enemy_pos;
 	}
 
+	double GetSpawnTime() {
+		return spawn_time;
+	}
+
+	bool CanMove() {
+		if (accumulator >= spawn_time) {
+			accumulator -= spawn_time;
+			return true;
+		}
+		return false;
+	}
+
+	void AddAccumulator(double time) {
+		accumulator += time;
+	}
+
 	void SetMoveQueue(std::string& path, std::string select) {
 		LoadMoveQueueCsv(path, select);
 	}
 
-	void Move() {
+	void MoveQueue() {
 		int order = move_queue.front();
 
 		if (order == order_map.at("l")){
@@ -73,5 +93,59 @@ public:
 
 		move_queue.pop();
 		move_queue.push(order);
+	}
+
+	void MoveHeatMap(auto& heatmap, auto &map) {
+		int x = 0, y = 0;
+		std::tie(y, x) = enemy_pos;
+		int32 next_y = 0, next_x = 0, max_temp = 1;
+
+		if (heatmap.GetCellTemp(y, x + 1) > max_temp) {
+			next_y = y;
+			next_x = x + 1;
+			max_temp = heatmap.GetCellTemp(y, x + 1);
+		}
+
+		if (heatmap.GetCellTemp(y, x - 1) > max_temp) {
+			next_y = y;
+			next_x = x - 1;
+			max_temp = heatmap.GetCellTemp(y, x - 1);
+		}
+
+		if (heatmap.GetCellTemp(y + 1, x) > max_temp) {
+			next_y = y + 1;
+			next_x = x;
+			max_temp = heatmap.GetCellTemp(y + 1, x);
+		}
+
+		if (heatmap.GetCellTemp(y - 1, x) > max_temp) {
+			next_y = y - 1;
+			next_x = x;
+			max_temp = heatmap.GetCellTemp(y - 1, x);
+		}
+
+
+		if (max_temp == 1) {
+			spawn_time = 1.0;
+			while (true) {
+				int32 add_y = Random(-1, 1);
+				int32 add_x = 0;
+
+				if (add_y == 0)
+					add_x = Random(-1, 1);
+
+				next_y = y + add_y;
+				next_x = x + add_x;
+
+				std::pair<int32, int32> next_pos = std::make_pair(next_y, next_x);
+				if (!CheckMove(map.GetMapCell(next_pos), map.GetMapVal("#")))
+					break;
+			}
+		}
+		else {
+			// Player追跡時は行動を速くする
+			spawn_time = 0.5;
+		}
+		enemy_pos = std::make_pair(next_y, next_x);
 	}
 };

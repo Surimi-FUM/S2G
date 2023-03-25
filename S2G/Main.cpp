@@ -9,6 +9,7 @@
 #include "enemy_class.h"
 #include "GameMaster.h"
 #include "mapchip_class.h"
+#include "heatmap_class.h"
 
 void Main()
 {
@@ -53,6 +54,13 @@ void Main()
 	// マップを 320x240 のレンダーテクスチャに描画し、それを最終的に 2 倍サイズで描画する
 	RenderTexture renderTexture{ 320, 240 };
 
+	// ヒートマップ
+	HeatMap heatmap = HeatMap(map);
+	heatmap.CoolHeatMap();
+	heatmap.CalcHeatMap(player_pos, player.GetTemp(), player.GetTempDistance());
+	heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+	heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
+
 	bool flag_eMove = false;
 
 	while (System::Update())
@@ -80,25 +88,67 @@ void Main()
 			flag_eMove = true;
 		}
 
-		if (flag_eMove) {
-			player_pos = player.GetPos();
+		// 蓄積時間が出現間隔を超えたら敵が行動する
+		enemy_1.AddAccumulator(Scene::DeltaTime());
+		enemy_2.AddAccumulator(Scene::DeltaTime());
+
+		if (enemy_1.CanMove())
+		{
 			enemy_pos = enemy_1.GetPos();
 
 			if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
+				heatmap.RestHeatMap();
+				heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+				heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
 				player_pos = map.GetPos("start");
 				player.SetPos(player_pos);
 			}
-			enemy_1.Move();
-			enemy_2.Move();
+			enemy_1.MoveQueue();
 			enemy_pos = enemy_1.GetPos();
 			enemy_poses["A_1"] = enemy_pos;
+
+			if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
+				heatmap.RestHeatMap();
+				heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+				heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
+				player_pos = map.GetPos("start");
+				player.SetPos(player_pos);
+			}
+		}
+
+		if (enemy_2.CanMove())
+		{
+			enemy_pos = enemy_2.GetPos();
+
+			if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
+				heatmap.RestHeatMap();
+				heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+				heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
+				player_pos = map.GetPos("start");
+				player.SetPos(player_pos);
+			}
+
+			enemy_2.MoveHeatMap(heatmap, map);
 			enemy_pos = enemy_2.GetPos();
 			enemy_poses["A_2"] = enemy_pos;
 
 			if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
+				heatmap.RestHeatMap();
+				heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+				heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
 				player_pos = map.GetPos("start");
 				player.SetPos(player_pos);
 			}
+		}
+
+		if (flag_eMove) {
+			player_pos = player.GetPos();
+
+			heatmap.CoolHeatMap();
+			heatmap.CalcHeatMap(player_pos, player.GetTemp(), player.GetTempDistance());
+			heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+			heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
+			heatmap.DebugConsole();
 
 			flag_eMove = false;
 		}
@@ -108,6 +158,10 @@ void Main()
 		*/
 		// レンダーテクスチャを黒でクリア
 		renderTexture.clear(ColorF{ 0.0,1.0 });
+
+		// スペースキーを押すとヒートマップを表示する
+		const bool showHeatmap = KeySpace.pressed();
+
 
 		{
 			// renderTexture を描画先として設定
@@ -133,6 +187,17 @@ void Main()
 
 					if (map.GetMapCell(cell) == map.GetMapVal("s"))
 						mapchip.GetChip_Map(7, 13).draw(pos);
+
+					// 通行可能判定
+					if (showHeatmap) // 通行不能な場合
+					{
+						// 半透明な正方形を描く
+						double temp = heatmap.GetCellTemp(cell);
+						if(temp >= 0)
+							Rect{ pos, mapchip.GetMapChipSize() }.draw(ColorF{ 1 - (1 / temp), 0, 0, 0.4});
+						else
+							Rect{ pos, mapchip.GetMapChipSize() }.draw(ColorF{ 0, 0, 1 - (1 / temp), 0.4});
+					}
 				}
 			}
 
