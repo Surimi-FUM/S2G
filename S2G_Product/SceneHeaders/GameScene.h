@@ -30,6 +30,8 @@ class Game : public App::Scene{
 	// マップを 320x240 のレンダーテクスチャに描画し、それを最終的に 2 倍サイズで描画する
 	RenderTexture renderTexture{ 320, 240 };
 
+	HeatMap heatmap;
+
 	bool flag_eMove = false;
 
 	// BGM

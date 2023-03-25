@@ -4,7 +4,7 @@
 void Main()
 {
 	// ウィンドウを 640x480 にリサイズする
-	Window::Resize(640, 600);
+	Window::Resize(640, 480);
 
 	FontAsset::Register(U"TitleFont", FontMethod::MSDF, 50, U"example/font/RocknRoll/RocknRollOne-Regular.ttf");
 	FontAsset(U"TitleFont").setBufferThickness(4);
@@ -14,7 +14,7 @@ void Main()
 	manager.add<Game>(State::Game);
 	manager.add<Clear>(State::Clear);
 
-	//manager.init(State::Clear);
+	manager.init(State::Clear);
 
 	while (System::Update())
 	{

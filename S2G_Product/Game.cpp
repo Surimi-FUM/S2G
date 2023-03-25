@@ -32,6 +32,13 @@ Game::Game(const InitData& init)
 
 	chip_path = "pictures/dark_siv3dkun.png";
 	mapchip.SetChip(chip_path, "e");
+
+	// ヒートマップ
+	heatmap = HeatMap(map);
+	heatmap.CoolHeatMap();
+	heatmap.CalcHeatMap(player_pos, player.GetTemp(), player.GetTempDistance());
+	heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+	heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
 }
 
 void Game::update()
@@ -63,25 +70,66 @@ void Game::update()
 		flag_eMove = true;
 	}
 
-	if (flag_eMove) {
-		player_pos = player.GetPos();
+	// 蓄積時間が出現間隔を超えたら敵が行動する
+	enemy_1.AddAccumulator(Scene::DeltaTime());
+	enemy_2.AddAccumulator(Scene::DeltaTime());
+
+	if (enemy_1.CanMove())
+	{
 		enemy_pos = enemy_1.GetPos();
 
 		if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
+			heatmap.RestHeatMap();
+			heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+			heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
 			player_pos = map.GetPos("start");
 			player.SetPos(player_pos);
 		}
-		enemy_1.Move();
-		enemy_2.Move();
+		enemy_1.MoveQueue();
 		enemy_pos = enemy_1.GetPos();
 		enemy_poses["A_1"] = enemy_pos;
+
+		if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
+			heatmap.RestHeatMap();
+			heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+			heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
+			player_pos = map.GetPos("start");
+			player.SetPos(player_pos);
+		}
+	}
+
+	if (enemy_2.CanMove())
+	{
+		enemy_pos = enemy_2.GetPos();
+
+		if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
+			heatmap.RestHeatMap();
+			heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+			heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
+			player_pos = map.GetPos("start");
+			player.SetPos(player_pos);
+		}
+
+		enemy_2.MoveHeatMap(heatmap, map);
 		enemy_pos = enemy_2.GetPos();
 		enemy_poses["A_2"] = enemy_pos;
 
 		if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
+			heatmap.RestHeatMap();
+			heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+			heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
 			player_pos = map.GetPos("start");
 			player.SetPos(player_pos);
 		}
+	}
+
+	if (flag_eMove) {
+		player_pos = player.GetPos();
+
+		heatmap.CoolHeatMap();
+		heatmap.CalcHeatMap(player_pos, player.GetTemp(), player.GetTempDistance());
+		heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+		heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
 
 		flag_eMove = false;
 	}
@@ -124,10 +172,25 @@ void Game::draw() const
 		const Point pos{ (player_pos.second * mapchip.GetMapChipSize()), (player_pos.first * mapchip.GetMapChipSize()) };
 		mapchip.GetChip_Player(1, 0).draw(pos);
 
+		int32 i = 0;
 		for (auto enemy_pos : enemy_poses) {
 			std::pair<int, int> e_pos = enemy_pos.second;
 			const Point pos{ (e_pos.second * mapchip.GetMapChipSize()), (e_pos.first * mapchip.GetMapChipSize()) };
-			mapchip.GetChip_Enemy(0, 0).draw(pos);
+			if (i == 0) {
+				if (enemy_1.GetChaseFlag()) {
+					mapchip.GetChip_Enemy(0, 0).draw(pos, ColorF{ 1.0, 0.0, 0.0 });
+				}
+				else
+					mapchip.GetChip_Enemy(0, 0).draw(pos);
+			}
+			else {
+				if (enemy_2.GetChaseFlag()) {
+					mapchip.GetChip_Enemy(0, 0).draw(pos, ColorF{ 1.0, 0.0, 0.0 });
+				}
+				else
+					mapchip.GetChip_Enemy(0, 0).draw(pos);
+			}
+			i++;
 		}
 	}
 
