@@ -148,7 +148,7 @@ void Main()
 			heatmap.CalcHeatMap(player_pos, player.GetTemp(), player.GetTempDistance());
 			heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
 			heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
-			heatmap.DebugConsole();
+			// heatmap.DebugConsole();
 
 			flag_eMove = false;
 		}
