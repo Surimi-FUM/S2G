@@ -1,4 +1,7 @@
-﻿#pragma once
+﻿/*
+* ヒートマップクラス
+*/
+#pragma once
 #include <Siv3D.hpp>
 #include<math.h>
 
@@ -12,6 +15,7 @@ class HeatMap {
 	};
 	std::pair<int32, int32> map_size;
 
+	//　ステージ全体の温度情報を取得
 	void SetHeatMap(auto& map) {
 		map_size = map.GetMapInfo();
 		for (int i = 0; i < map.GetMapInfo().first; i++) {
@@ -35,6 +39,7 @@ class HeatMap {
 		}
 	}
 
+	//　近くにある最も低い温度の影響を受ける
 	void ColdHeatMap(int32 x, int32 y) {
 		int32 cold_temp = -1, max_cold = 0;
 		for (int i = 0; i < 2; i++) {
@@ -54,6 +59,7 @@ class HeatMap {
 		heatmap.at(y).at(x) += max_cold;
 	}
 
+	// あるマスの温度情報を更新する
 	void UpdateHeatMap(int32 x, int32 y, int32 temp, std::queue<std::pair<int32, int32>>& h_queue, std::vector<bool>& v_cell) {
 		std::pair<int32, int32> next_pos;
 		int32 cold_temp = -1, max_cold = 0;
@@ -81,17 +87,16 @@ class HeatMap {
 	}
 
 public:
+	// インスタンス生成用コンストラクタ
 	HeatMap(auto& map) {
 		SetHeatMap(map);
 	}
 
+	// 他クラスで変数宣言する用のコンストラクタ
 	HeatMap() {
 	}
 
-	void ChangeHeatMap(auto& map) {
-		SetHeatMap(map);
-	}
-
+	// #----- パラメータ(メンバ変数)取得 -----#
 	int32 GetCellTemp(std::pair<int, int>& pair) {
 		return heatmap.at(pair.first).at(pair.second);
 	}
@@ -104,6 +109,13 @@ public:
 		return temp_map.at(str);
 	}
 
+	// #----- パラメータ変更 -----#
+	void ChangeHeatMap(auto& map) {
+		SetHeatMap(map);
+	}
+
+	// #----- アクション処理 -----#
+	//　ステージの温度は空間(".")なら1に、安全地帯なら-1に収束する
 	void CoolHeatMap() {
 		for (int32 i = 0; i < map_size.first; i++) {
 			for (int32 j = 0; j < map_size.second; j++) {
@@ -119,6 +131,7 @@ public:
 		}
 	}
 
+	//　ステージの空間(".")の温度を1にリセットする
 	void RestHeatMap() {
 		for (int32 i = 0; i < map_size.first; i++) {
 			for (int32 j = 0; j < map_size.second; j++) {
@@ -131,6 +144,7 @@ public:
 		}
 	}
 
+	// 熱源によるヒートマップを計算する
 	void CalcHeatMap(std::pair<int, int> pos, int32 temp, int32 distance) {
 		std::queue<std::pair<int32, int32>> heat_queue;
 		std::pair<int32, int32> heat_pos;
@@ -140,14 +154,13 @@ public:
 
 		// 幅優先探索
 		//　初期条件
-		if (distance > 5)
+		if (distance > 5)  // 熱源が影響を与えるユークリッド距離は5を最大値とする
 			distance = 5;
-
 		std::tie(y, x) = pos;
 		heatmap.at(y).at(x) = temp;
 		heat_pos = std::make_pair(y, x);
 		heat_queue.push(heat_pos);
-		visitted_cell.at(x * y) = true;
+		visitted_cell.at(x * y) = true;   // 2進数で処理すれば軽量化できる
 
 		// ヒートマップ更新処理
 		while (!heat_queue.empty()) {
@@ -159,6 +172,7 @@ public:
 			num = std::pow((y - pos.first), 2) + std::pow((x - pos.second), 2);
 			search_dis = std::sqrt(num);
 
+			//　探索限界距離まで来たら更新を終える
 			if (search_dis >= distance)
 				break;
 

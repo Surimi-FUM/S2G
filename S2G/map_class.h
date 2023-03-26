@@ -1,4 +1,7 @@
-﻿#pragma once
+﻿/*
+* マップ(ステージ)クラス
+*/
+#pragma once
 #include <fstream>
 #include <sstream>
 #include "enemy_class.h"
@@ -16,6 +19,7 @@ class Map {
 		{"g", 3},
 	};
 
+	//　csvファイルからマップを数字で生成する
 	void LoadMapCsv(std::string &path) {
 		std::ifstream csv(path);
 		if (not csv)
@@ -56,11 +60,12 @@ class Map {
 	}
 
 public:
-
+	//　コンストラクタ
 	Map(std::string &path){
 		LoadMapCsv(path);
 	}
 
+	// #----- パラメータ(メンバ変数)取得 -----# 
 	int GetMapVal(std::string str) {
 		return map_val.at(str);
 	}
@@ -88,12 +93,15 @@ public:
 			return std::make_pair(0, 0);
 	}
 
+	// #----- アクション処理 -----#
+	// クリア判定
 	bool CheckClear(std::pair<int, int> &player_pos) {
 		if (map.at(player_pos.first).at(player_pos.second) == map_val.at("g"))
 			return true;
 		return false;
 	}
 
+	// デバック用　CLI表示
 	void ShowConsole(std::pair<int, int> &p_pos, std::map<std::string, std::pair<int, int>> &e_pos_map) {
 		Print << U"P [Show]: " << p_pos.first << U", " << p_pos.second;
 		for (auto e_pos : e_pos_map) {

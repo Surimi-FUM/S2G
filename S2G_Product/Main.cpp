@@ -1,4 +1,7 @@
-﻿# include <Siv3D.hpp> // OpenSiv3D v0.6.6
+﻿/*
+* S2G_Productのメイン関数
+*/
+# include <Siv3D.hpp> // OpenSiv3D v0.6.6
 #include "Scenes.h"
 
 void Main()
@@ -14,7 +17,8 @@ void Main()
 	manager.add<Game>(State::Game);
 	manager.add<Clear>(State::Clear);
 
-	manager.init(State::Clear);
+	// デバック用　開始したいシーンを指定できる
+	// manager.init(State::Clear);
 
 	while (System::Update())
 	{

@@ -1,20 +1,30 @@
-﻿# include "SceneHeaders/TitleScene.h"
+﻿/*
+* タイトル画面クラスのメンバ関数定義
+*/
+# include "SceneHeaders/TitleScene.h"
 
+// コンストラクタ　※必ず実装しないと動かない
 Title::Title(const InitData& init)
-	: IScene{ init } {}
+	: IScene{ init } {
+	// 音楽再生
+	audio.play();
+}
 
+//更新関数　メイン関数のWhile文内で周期的に呼ばれる
 void Title::update()
 {
-	audio.play();
-
+	// Sキーが押されたらゲーム開始
 	if (KeyS.pressed()) {
 		audio.pause(2s);
 		changeScene(State::Game);
 	}
 }
 
+//　描画関数　メイン関数のWhile文内で周期的に呼ばれる
+//　描画サイズと位置はウィンドウサイズ(640 * 480)に合わせている　(次の改良では、位置を比率で求めるようにする)
 void Title::draw() const
 {
+	// 毎回背景を指定した色でリセットする
 	Scene::SetBackground(ColorF{ 0.2, 0.8, 0.4 });
 
 	image.scaled(1.5).draw();
@@ -30,5 +40,6 @@ void Title::draw() const
 
 	font(U"ゲームを始める：[S] \n 終了：[ESC]").drawAt(320, 370);
 
-	//audio.setVolume(0.5);
+	// 音量の調整は倍率を指定する：2倍=2.0, 半減＝0.5　
+	//　audio.setVolume(0.5);
 }

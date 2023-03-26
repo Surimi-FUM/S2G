@@ -1,4 +1,7 @@
-﻿#pragma once
+﻿/*
+* 敵クラスの実装
+*/
+#pragma once
 
 class Enemy {
 	std::pair<int, int> enemy_pos;
@@ -44,10 +47,12 @@ class Enemy {
 	}
 
 public:
+	// コンストラクタ
 	Enemy(std::pair<int, int> &e_pos) {
 		enemy_pos = e_pos;
 	}
 
+	// #----- パラメータ(メンバ変数)取得 -----# 
 	std::pair<int, int> GetPos() {
 		return enemy_pos;
 	}
@@ -56,14 +61,7 @@ public:
 		return spawn_time;
 	}
 
-	bool CanMove() {
-		if (accumulator >= spawn_time) {
-			accumulator -= spawn_time;
-			return true;
-		}
-		return false;
-	}
-
+	// #----- パラメータ変更 -----#
 	void AddAccumulator(double time) {
 		accumulator += time;
 	}
@@ -72,6 +70,16 @@ public:
 		LoadMoveQueueCsv(path, select);
 	}
 
+	// #----- アクション処理 -----#
+	bool CanMove() {
+		if (accumulator >= spawn_time) {
+			accumulator -= spawn_time;
+			return true;
+		}
+		return false;
+	}
+
+	// Queueで行動する
 	void MoveQueue() {
 		int order = move_queue.front();
 
@@ -95,11 +103,13 @@ public:
 		move_queue.push(order);
 	}
 
+	// ヒートマップで行動する
 	void MoveHeatMap(auto& heatmap, auto &map) {
 		int x = 0, y = 0;
 		std::tie(y, x) = enemy_pos;
 		int32 next_y = 0, next_x = 0, max_temp = 1;
 
+		// 周囲4マスの中で最も温度が高い方向へ移動する
 		if (heatmap.GetCellTemp(y, x + 1) > max_temp) {
 			next_y = y;
 			next_x = x + 1;
@@ -124,7 +134,7 @@ public:
 			max_temp = heatmap.GetCellTemp(y - 1, x);
 		}
 
-
+		// 温度が均一の場合はランダムで移動する
 		if (max_temp == 1) {
 			spawn_time = 1.0;
 			while (true) {
@@ -146,6 +156,7 @@ public:
 			// Player追跡時は行動を速くする
 			spawn_time = 0.5;
 		}
+		// 座標を移動先の座標に更新する
 		enemy_pos = std::make_pair(next_y, next_x);
 	}
 };

@@ -1,7 +1,10 @@
-﻿#pragma once
+﻿/*
+* クリア画面のクラス実装
+*/
+#pragma once
 #include "Common.h"
 
-// タイトルシーン
+// クリアシーン
 class Clear : public App::Scene
 {
 	const Texture texture{ U"pictures/clear_image.png" };

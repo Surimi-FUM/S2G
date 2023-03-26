@@ -16,7 +16,7 @@ void Main()
 	// ウィンドウを 640x480 にリサイズする
 	Window::Resize(640, 480);
 
-	// GameMaster
+	// 相互関与
 	GameMaster game_master = GameMaster();
 
 	// Map
@@ -60,42 +60,46 @@ void Main()
 	heatmap.CalcHeatMap(player_pos, player.GetTemp(), player.GetTempDistance());
 	heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
 	heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
-
-	bool flag_eMove = false;
+	bool flag_Update_heatmap = false;
 
 	while (System::Update())
 	{
+		//　クリア判定
 		if (map.CheckClear(player_pos))
 			break;
 
+		//　プレイヤ移動処理
 		if (KeyLeft.down()) {
 			player.Move(1, "Left", map);
-			flag_eMove = true;
+			flag_Update_heatmap = true;
 		}
 
 		if (KeyRight.down()) {
 			player.Move(1, "Right", map);
-			flag_eMove = true;
+			flag_Update_heatmap = true;
 		}
 
 		if (KeyUp.down()) {
 			player.Move(1, "Up", map);
-			flag_eMove = true;
+			flag_Update_heatmap = true;
 		}
 
 		if (KeyDown.down()) {
 			player.Move(1, "Down", map);
-			flag_eMove = true;
+			flag_Update_heatmap = true;
 		}
 
+		// 敵移動処理
 		// 蓄積時間が出現間隔を超えたら敵が行動する
 		enemy_1.AddAccumulator(Scene::DeltaTime());
 		enemy_2.AddAccumulator(Scene::DeltaTime());
 
+		//　敵1　処理
 		if (enemy_1.CanMove())
 		{
 			enemy_pos = enemy_1.GetPos();
 
+			// プレイヤとの衝突判定
 			if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
 				heatmap.RestHeatMap();
 				heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
@@ -103,10 +107,13 @@ void Main()
 				player_pos = map.GetPos("start");
 				player.SetPos(player_pos);
 			}
+
+			//　移動処理
 			enemy_1.MoveQueue();
 			enemy_pos = enemy_1.GetPos();
 			enemy_poses["A_1"] = enemy_pos;
 
+			// プレイヤとの衝突判定
 			if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
 				heatmap.RestHeatMap();
 				heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
@@ -116,10 +123,12 @@ void Main()
 			}
 		}
 
+		//　敵2　処理
 		if (enemy_2.CanMove())
 		{
 			enemy_pos = enemy_2.GetPos();
 
+			// プレイヤとの衝突判定
 			if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
 				heatmap.RestHeatMap();
 				heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
@@ -128,10 +137,12 @@ void Main()
 				player.SetPos(player_pos);
 			}
 
+			//　移動処理
 			enemy_2.MoveHeatMap(heatmap, map);
 			enemy_pos = enemy_2.GetPos();
 			enemy_poses["A_2"] = enemy_pos;
 
+			// プレイヤとの衝突判定
 			if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
 				heatmap.RestHeatMap();
 				heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
@@ -141,7 +152,8 @@ void Main()
 			}
 		}
 
-		if (flag_eMove) {
+		// ヒートマップ更新
+		if (flag_Update_heatmap) {
 			player_pos = player.GetPos();
 
 			heatmap.CoolHeatMap();
@@ -150,7 +162,7 @@ void Main()
 			heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
 			heatmap.DebugConsole();
 
-			flag_eMove = false;
+			flag_Update_heatmap = false;
 		}
 
 		/*
@@ -162,12 +174,12 @@ void Main()
 		// スペースキーを押すとヒートマップを表示する
 		const bool showHeatmap = KeySpace.pressed();
 
-
+		// レンダーテクスチャで描画する場合は、{}で描画先テクスチャを指定する
 		{
 			// renderTexture を描画先として設定
 			const ScopedRenderTarget2D rt{ renderTexture };
 
-			// マップ
+			// マップ（ステージ）描画
 			for (int32 y = 0; y < map.GetMapInfo().first; ++y)
 			{
 				for (int32 x = 0; x < map.GetMapInfo().second; ++x)
@@ -188,22 +200,26 @@ void Main()
 					if (map.GetMapCell(cell) == map.GetMapVal("s"))
 						mapchip.GetChip_Map(7, 13).draw(pos);
 
-					// 通行可能判定
-					if (showHeatmap) // 通行不能な場合
+					// ヒートマップ描画処理
+					if (showHeatmap)
 					{
-						// 半透明な正方形を描く
+						// 温度に合わせた色を透過させて上に描画する
 						double temp = heatmap.GetCellTemp(cell);
 						if(temp >= 0)
+							//　高温は赤
 							Rect{ pos, mapchip.GetMapChipSize() }.draw(ColorF{ 1 - (1 / temp), 0, 0, 0.4});
 						else
+							//　低温は青
 							Rect{ pos, mapchip.GetMapChipSize() }.draw(ColorF{ 0, 0, 1 - (1 / temp), 0.4});
 					}
 				}
 			}
 
+			//　プレイヤ描画
 			const Point pos{ (player_pos.second * mapchip.GetMapChipSize()), (player_pos.first * mapchip.GetMapChipSize()) };
 			mapchip.GetChip_Player(1, 0).draw(pos);
 
+			//　敵描画
 			for (auto enemy_pos : enemy_poses) {
 				std::pair<int, int> e_pos = enemy_pos.second;
 				const Point pos{ (e_pos.second * mapchip.GetMapChipSize()), (e_pos.first * mapchip.GetMapChipSize()) };
@@ -211,7 +227,7 @@ void Main()
 			}
 		}
 
-
+		// テクスチャの設定
 		{
 			// テクスチャ拡大描画時にフィルタリング（なめらかなな拡大処理）をしないサンプラーステートを適用
 			const ScopedRenderStates2D sampler{ SamplerState::ClampNearest };

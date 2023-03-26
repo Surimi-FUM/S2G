@@ -1,4 +1,7 @@
-﻿#pragma once
+﻿/*
+* タイトル画面のクラス実装
+*/
+#pragma once
 #include "Common.h"
 
 // タイトルシーン

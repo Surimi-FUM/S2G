@@ -1,4 +1,7 @@
-﻿#pragma once
+﻿/*
+* マップチップクラス
+*/
+#pragma once
 # include <Siv3D.hpp>
 
 class MapChip {
@@ -10,21 +13,13 @@ class MapChip {
 	static constexpr int32 MapChipSize = 16;
 
 public:
+	//　コンストラクタ
 	MapChip(std::string& map_image_path) {
 		const String image_path = Unicode::Widen(map_image_path);
 		m_base = Texture {image_path};
 	}
 
-	void SetChip(std::string& map_image_path, std::string str) {
-		const String image_path = Unicode::Widen(map_image_path);
-		if(str == "p")
-			player = Texture{ image_path };
-
-		if (str == "e") {
-			enemy = Texture{ image_path };
-		}
-	}
-
+	// #----- パラメータ(メンバ変数)取得 -----#
 	int32 GetMapChipSize() {
 		return MapChipSize;
 	}
@@ -43,5 +38,16 @@ public:
 	TextureRegion GetChip_Enemy(int32 x, int32 y) const
 	{
 		return enemy(22*x, 28*y+8, 20, 28);
+	}
+
+	// #----- パラメータ変更 -----#
+	void SetChip(std::string& map_image_path, std::string str) {
+		const String image_path = Unicode::Widen(map_image_path);
+		if (str == "p")
+			player = Texture{ image_path };
+
+		if (str == "e") {
+			enemy = Texture{ image_path };
+		}
 	}
 };
