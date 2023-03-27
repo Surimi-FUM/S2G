@@ -1,6 +1,7 @@
 ﻿/*
 * クリア画面クラスのメンバ関数定義
 */
+#pragma once
 # include "SceneHeaders/ClearScene.h"
 
 // コンストラクタ ※必ず実装しないと動かない

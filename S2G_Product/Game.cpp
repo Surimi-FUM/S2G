@@ -2,6 +2,7 @@
 * プレイ画面クラスのメンバ関数定義
 * プレイヤ、敵、マップなど、ゲーム処理はここに記述する
 */
+#pragma once
 # include "SceneHeaders/GameScene.h"
 
 // コンストラクタ　※必ず実装

@@ -1,6 +1,7 @@
 ﻿/*
 * タイトル画面クラスのメンバ関数定義
 */
+#pragma once
 # include "SceneHeaders/TitleScene.h"
 
 // コンストラクタ　※必ず実装しないと動かない

@@ -1,6 +1,7 @@
 ﻿/*
 * プレイ画面のクラス実装
 */
+#pragma once
 # include "Common.h"
 #include "Objects.h"
 

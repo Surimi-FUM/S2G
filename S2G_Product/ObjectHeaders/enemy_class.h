@@ -49,8 +49,6 @@ class Enemy {
 				// 先頭の数字が指定されたものであるなら、その行の行動ルールでQueueを生成する
 				if (order == select)
 					flag_select = true;
-				else
-					flag_select = false;
 			}
 		}
 	}
@@ -99,6 +97,8 @@ public:
 	// Queueで行動する
 	void MoveQueue() {
 		int order = move_queue.front();
+		move_queue.pop();
+		move_queue.push(order);
 
 		if (order == order_map.at("l")){
 			enemy_pos.second -= 1;
@@ -115,9 +115,6 @@ public:
 		if (order == order_map.at("d")){
 			enemy_pos.first += 1;
 		}
-
-		move_queue.pop();
-		move_queue.push(order);
 	}
 
 	// ヒートマップで行動する

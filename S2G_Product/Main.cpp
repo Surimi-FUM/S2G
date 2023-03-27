@@ -1,6 +1,7 @@
 ﻿/*
 * S2G_Productのメイン関数
 */
+#pragma once
 # include <Siv3D.hpp> // OpenSiv3D v0.6.6
 #include "Scenes.h"
 
