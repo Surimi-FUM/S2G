@@ -1,5 +1,6 @@
 # S2G
 Siv3Dのサンプルとして公開されている「2D RPG のマップと移動の基本」(ゲーム典型 007A)を参考にしたダンジョン脱出ゲーム。
+![S2Gプレイ](images/s2g.gif)
 
 ## 開発環境
 PC：Windows 10 Pro、Intel Core i7-6700K  
