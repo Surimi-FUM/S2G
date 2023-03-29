@@ -80,6 +80,6 @@ C++のスキルを磨くため、できるだけ処理はC++で実装する。
 ・軽量化
 
 ## 使用したライセンス
-・Siv3D　[https://github.com/Siv3D/OpenSiv3D](https://github.com/Siv3D/OpenSiv3D/blob/main/LICENSE)
-・音楽素材MusMus https://musmus.main.jp
-・「2D RPG のマップと移動の基本」(ゲーム典型 007A)　https://github.com/Reputeless/games/blob/main/LICENSE
+・Siv3D　[https://github.com/Siv3D/OpenSiv3D](https://github.com/Siv3D/OpenSiv3D/blob/main/LICENSE)  
+・音楽素材MusMus https://musmus.main.jp  
+・「2D RPG のマップと移動の基本」(ゲーム典型 007A)　https://github.com/Reputeless/games/blob/main/LICENSE  
