@@ -14,8 +14,8 @@ S2G_Productファイル：タイトルからクリアシーンまで、作品と
 ## 開発環境
 PC：Windows 10 Pro、Intel Core i7-6700K  
 IDE：Visual Studio 2022  
-言語：C++  
-フレームワーク：Siv3D 0.6.6
+言語：C++(20)  
+フレームワーク：Siv3D 0.6.6  
 ### テスト環境
 開発環境と同じ
 
