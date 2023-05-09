@@ -1,4 +1,5 @@
 # S2G
+[1か月ゲーム制作チャレンジ作品]  
 Siv3Dのサンプルとして公開されている「2D RPG のマップと移動の基本」(ゲーム典型 007A)を参考にしたダンジョン脱出ゲーム。  
 
 ![s2g](https://user-images.githubusercontent.com/116449282/228413805-55cf21ad-ba1c-4f84-bb94-ada00d595455.gif)　　
