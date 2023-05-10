@@ -24,12 +24,12 @@ void Main()
 	Map map = Map(csv_path);
 
 	// Player
-	std::pair<int, int> player_pos = map.GetPos("start");
+	std::pair<int32, int32> player_pos = map.GetPos("start");
 	Player player = Player(player_pos);
 
 	// Enemy
 	std::map<std::string, std::pair<int, int>> enemy_poses;
-	std::string enemy_move_path = "enemy_move1.csv";
+	std::string enemy_move_path = "move_rule/enemy_move1.csv";
 	std::pair<int, int> enemy_pos = map.GetPos("enemy", 0);
 	enemy_poses["A_1"] = enemy_pos;
 	Enemy enemy_1 = Enemy(enemy_pos);
@@ -62,6 +62,8 @@ void Main()
 	heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
 	bool flag_Update_heatmap = false;
 
+	double walkProgress = 1.0;
+
 	while (System::Update())
 	{
 		//　クリア判定
@@ -69,24 +71,52 @@ void Main()
 			break;
 
 		//　プレイヤ移動処理
-		if (KeyLeft.down()) {
-			player.Move(1, "Left", map);
-			flag_Update_heatmap = true;
+		if (!player.CanWalk()) {
+			if (KeyLeft.pressed()) {
+				player.Move2(1, "Left", map);
+				flag_Update_heatmap = true;
+			}
+
+			if (KeyRight.pressed()) {
+				player.Move2(1, "Right", map);
+				flag_Update_heatmap = true;
+			}
+
+			if (KeyUp.pressed()) {
+				player.Move2(1, "Up", map);
+				flag_Update_heatmap = true;
+			}
+
+			if (KeyDown.pressed()) {
+				player.Move2(1, "Down", map);
+				flag_Update_heatmap = true;
+			}
+
+			// 移動が発生する場合
+			if (player.CanWalk())
+			{
+				// 歩行の進捗を戻す
+				walkProgress -= 1.0;
+			}
+			else
+			{
+				// 移動しない場合、歩行の進捗は 1.0
+				walkProgress = 1.0;
+			}
 		}
 
-		if (KeyRight.down()) {
-			player.Move(1, "Right", map);
-			flag_Update_heatmap = true;
-		}
+		// 移動中の場合
+		if (player.CanWalk())
+		{
+			// 歩行の進捗を進める
+			walkProgress += (Scene::DeltaTime() * player.GetWalkSpeed());
 
-		if (KeyUp.down()) {
-			player.Move(1, "Up", map);
-			flag_Update_heatmap = true;
-		}
-
-		if (KeyDown.down()) {
-			player.Move(1, "Down", map);
-			flag_Update_heatmap = true;
+			// 歩行の進捗が 1.0 以上になったら
+			if (1.0 <= walkProgress)
+			{
+				// 現在のセルを nextCell にして移動完了
+				player.ArrivePos();
+			}
 		}
 
 		// 敵移動処理
@@ -165,6 +195,7 @@ void Main()
 			flag_Update_heatmap = false;
 		}
 
+
 		/*
 		描画処理
 		*/
@@ -216,8 +247,34 @@ void Main()
 			}
 
 			//　プレイヤ描画
-			const Point pos{ (player_pos.second * mapchip.GetMapChipSize()), (player_pos.first * mapchip.GetMapChipSize()) };
-			mapchip.GetChip_Player(1, 0).draw(pos);
+			// 現在のセル座標
+			std::pair<int32, int32> p_pos = player.GetPos();
+			Point currentCell{ p_pos.second, p_pos.first };
+
+			// 移動先のセル座標
+			p_pos = player.GetNextPos();
+			Point nextCell = { p_pos.second, p_pos.first };
+
+
+			// 歩行の進捗に基づいて、現在のセル座標を小数で計算
+			const Vec2 cellPos = currentCell.lerp(nextCell, walkProgress);
+
+			// 現在のセル座標を描画座標に変換
+			const Vec2 pos = (cellPos * mapchip.GetMapChipSize()) + Vec2{ -2, -12 };
+
+			// 歩行のアニメーションのインデックス (0, 1, 2)
+			int32 animationIndex = 1;
+
+			// 歩行の進捗が 0.25～0.75 の間は歩行中の絵にする
+			if (InRange(walkProgress, 0.25, 0.75))
+			{
+				// (nextCell.x + nextCell.y) が偶数なら 0, 奇数なら 2
+				animationIndex = IsEven(nextCell.x + nextCell.y) ? 0 : 2;
+			}
+
+			// Siv3D くんを描画する
+			Texture p_texture = mapchip.GetTexture("player");
+			p_texture((20 * animationIndex), (28 * player.GetDirection()), 20, 28).draw(pos);
 
 			//　敵描画
 			for (auto enemy_pos : enemy_poses) {

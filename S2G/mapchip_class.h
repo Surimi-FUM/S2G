@@ -40,6 +40,17 @@ public:
 		return enemy(22*x, 28*y+8, 20, 28);
 	}
 
+	Texture GetTexture(std::string select) const {
+		if (select == "map")
+			return m_base;
+		else if (select == "player")
+			return player;
+		else if (select == "enemy")
+			return enemy;
+		else
+			return player;
+	}
+
 	// #----- パラメータ変更 -----#
 	void SetChip(std::string& map_image_path, std::string str) {
 		const String image_path = Unicode::Widen(map_image_path);

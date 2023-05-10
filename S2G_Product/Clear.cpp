@@ -19,6 +19,12 @@ void Clear::update()
 	// Enterキーでタイトル画面へ戻る
 	if (KeyEnter.pressed())
 		changeScene(State::Title);
+
+	// "Licenses" ボタンが押されたら
+	if (KeyL.pressed()) {
+		// ライセンス情報を表示
+		LicenseManager::ShowInBrowser();
+	}
 }
 
 // 描画関数
@@ -33,8 +39,8 @@ void Clear::draw() const
 
 	const double outlineScale = 0.2;
 	const ColorF outlineColor{ 0.0, 0.0, 0.0 };
-	fontSDF(U"タイトル画面へ：[Enter] \n 終了：[ESC]").drawAt(TextStyle::Outline(outlineScale, outlineColor), 200, 350);
+	fontSDF(U"タイトル画面へ：[Enter] \n 終了：[ESC] \n ライセンス：[L]").drawAt(TextStyle::Outline(outlineScale, outlineColor), 200, 350);
 
 	// 音量の調整は倍率を指定する：2倍 = 2.0, 半減＝0.5
-	audio.setVolume(0.7);
+	audio.setVolume(0.5);
 }

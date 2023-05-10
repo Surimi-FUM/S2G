@@ -19,6 +19,12 @@ void Title::update()
 		audio.pause(2s);
 		changeScene(State::Game);
 	}
+
+	// "Licenses" ボタンが押されたら
+	if (KeyL.pressed()) {
+		// ライセンス情報を表示
+		LicenseManager::ShowInBrowser();
+	}
 }
 
 //　描画関数　メイン関数のWhile文内で周期的に呼ばれる
@@ -39,7 +45,7 @@ void Title::draw() const
 
 	Line{ 250, 250, 390, 250 }.drawArrow(10, Vec2{ 20, 20 }, Palette::White);
 
-	font(U"ゲームを始める：[S] \n 終了：[ESC]").drawAt(320, 370);
+	font(U"ゲームを始める：[S] \n 終了：[ESC] \n ライセンス：[L]").drawAt(320, 370);
 
 	// 音量の調整は倍率を指定する：2倍=2.0, 半減＝0.5　
 	//　audio.setVolume(0.5);

@@ -17,7 +17,7 @@ class Game : public App::Scene{
 
 	// Enemy
 	std::map<std::string, std::pair<int, int>> enemy_poses;
-	std::string enemy_move_path = "enemy_move1.csv";
+	std::string enemy_move_path = "move_rule/enemy_move1.csv";
 	std::pair<int, int> enemy_pos;
 	Enemy enemy_1;
 	Enemy enemy_2;

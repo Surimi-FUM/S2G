@@ -768,7 +768,7 @@
     <None Include="App\engine\font\min\siv3d-min.woff">
       <Filter>Resource Files\engine\font\min</Filter>
     </None>
-    <None Include="App\enemy_move1.csv" />
+    <None Include="App\move_rule\enemy_move1.csv" />
     <None Include="App\maps\csv\map1.csv" />
   </ItemGroup>
   <ItemGroup>
