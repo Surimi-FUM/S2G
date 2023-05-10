@@ -2,8 +2,8 @@
 [1か月ゲーム制作チャレンジ作品]  
 Siv3Dのサンプルとして公開されている「2D RPG のマップと移動の基本」(ゲーム典型 007A)を参考にしたダンジョン脱出ゲーム。  
 
-![s2g](https://github.com/Surimi-FUM/S2G/assets/116449282/63f2414e-faf1-4139-8162-9d1e757783ac)  
-　
+![s2g](https://github.com/Surimi-FUM/S2G/assets/116449282/e145de33-3c77-420f-b5be-1d1e24a73fee)  
+
 
 S2Gファイル：開発用ファイル。ゲーム部分のみ。  
 S2G_Productファイル：リリース用ファイル。タイトルからクリアシーンまで、作品として遊べる。  
