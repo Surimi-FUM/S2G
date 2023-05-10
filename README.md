@@ -4,9 +4,9 @@ Siv3Dのサンプルとして公開されている「2D RPG のマップと移�
 
 ![s2g](https://user-images.githubusercontent.com/116449282/228413805-55cf21ad-ba1c-4f84-bb94-ada00d595455.gif)　　
 
-S2Gファイル：ゲーム部分のみ。スペースキーでヒートマップを可視化できる。  
-S2G_Productファイル：タイトルからクリアシーンまで、作品として遊べる。  
-実行ファイル：S2G/App/S2G(debug).exe、S2G_Product/App/S2G_Product(debug).exe  
+S2Gファイル：開発用ファイル。ゲーム部分のみ。スペースキーでヒートマップを可視化できる。  
+S2G_Productファイル：リリース用ファイル。タイトルからクリアシーンまで、作品として遊べる。  
+実行ファイル：S2G_Product/App/S2G_Product.exe  
 
 ## 開発環境
 PC：Windows 10 Pro、Intel Core i7-6700K  
