@@ -97,7 +97,7 @@ public:
 	}
 
 	// #----- パラメータ(メンバ変数)取得 -----#
-	int32 GetCellTemp(std::pair<int, int>& pair) {
+	int32 GetCellTemp(std::pair<int, int>& pair) const {
 		return heatmap.at(pair.first).at(pair.second);
 	}
 

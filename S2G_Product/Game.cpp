@@ -34,6 +34,8 @@ Game::Game(const InitData& init)
 	mapchip.SetChip(chip_path, "p");
 	chip_path = "pictures/dark_siv3dkun.png";
 	mapchip.SetChip(chip_path, "e");
+	chip_path = "pictures/b_enemy.png";
+	mapchip.SetChip(chip_path, "e_q");
 
 	// ヒートマップ
 	heatmap = HeatMap(map);
@@ -158,6 +160,9 @@ void Game::draw() const
 	// レンダーテクスチャを黒でクリア
 	renderTexture.clear(ColorF{ 0.0,1.0 });
 
+	// スペースキーを押すとヒートマップを表示する
+	const bool showHeatmap = KeySpace.pressed();
+
 	//　レンダーテクスチャで描画する場合は、{}で描画先テクスチャを指定する
 	{
 		// renderTexture を描画先として設定
@@ -183,6 +188,19 @@ void Game::draw() const
 
 				if (map.GetMapCell(cell) == map.GetMapVal("s"))
 					mapchip.GetChip_Map(7, 13).draw(pos);
+
+				// ヒートマップ描画処理
+				if (showHeatmap)
+				{
+					// 温度に合わせた色を透過させて上に描画する
+					double temp = heatmap.GetCellTemp(cell);
+					if (temp >= 0)
+						//　高温は赤
+						Rect{ pos, mapchip.GetMapChipSize() }.draw(ColorF{ 1 - (1 / temp), 0, 0, 0.4 });
+					else
+						//　低温は青
+						Rect{ pos, mapchip.GetMapChipSize() }.draw(ColorF{ 0, 0, 1 - (1 / temp), 0.4 });
+				}
 			}
 		}
 
@@ -196,11 +214,7 @@ void Game::draw() const
 			std::pair<int, int> e_pos = enemy_pos.second;
 			const Point pos{ (e_pos.second * mapchip.GetMapChipSize()), (e_pos.first * mapchip.GetMapChipSize()) };
 			if (i == 0) {
-				if (enemy_1.GetChaseFlag()) {
-					mapchip.GetChip_Enemy(0, 0).draw(pos, ColorF{ 1.0, 0.0, 0.0 });
-				}
-				else
-					mapchip.GetChip_Enemy(0, 0).draw(pos);
+				mapchip.GetChip_Enemy_Q(0, 0).scaled(0.6).draw(pos);
 			}
 			else {
 				if (enemy_2.GetChaseFlag()) {
@@ -208,6 +222,7 @@ void Game::draw() const
 				}
 				else
 					mapchip.GetChip_Enemy(0, 0).draw(pos);
+
 			}
 			i++;
 		}

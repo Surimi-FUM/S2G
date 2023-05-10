@@ -122,6 +122,7 @@ Resource(engine/soundfont/GMGSx.sf2.zstdcmp)
 //////////////////////////////////////////////////////
 Resource(example/siv3d-kun.png)
 Resource(pictures/dark_siv3dkun.png)
+Resource(pictures/b_enemy.png)
 Resource(pictures/clear_image.png)
 Resource(pictures/pipo-bg005a.jpg)
 Resource(pictures/pipo-pic001.jpg)

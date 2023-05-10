@@ -8,6 +8,7 @@ class MapChip {
 	Texture m_base;
 	Texture player;
 	Texture enemy;
+	Texture enemy_q;
 
 	// マップチップのサイズ（ピクセル）
 	static constexpr int32 MapChipSize = 16;
@@ -44,6 +45,11 @@ public:
 		return enemy(22 * x, 28 * y + 8, 20, 28);
 	}
 
+	TextureRegion GetChip_Enemy_Q(int32 x, int32 y) const
+	{
+		return enemy_q(22 * x, 28 * y, 34, 34);
+	}
+
 	// #----- パラメータ変更 -----#
 	void SetChip(std::string& map_image_path, std::string str) {
 		const String image_path = Unicode::Widen(map_image_path);
@@ -52,6 +58,10 @@ public:
 
 		if (str == "e") {
 			enemy = Texture{ image_path };
+		}
+
+		if (str == "e_q") {
+			enemy_q = Texture{ image_path };
 		}
 	}
 };

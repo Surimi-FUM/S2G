@@ -37,7 +37,7 @@ public:
 
 	TextureRegion GetChip_Enemy(int32 x, int32 y) const
 	{
-		return enemy(22*x, 28*y+8, 20, 28);
+		return enemy(22*x, 28*y+12, 20, 28);
 	}
 
 	Texture GetTexture(std::string select) const {
