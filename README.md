@@ -9,6 +9,12 @@ S2Gファイル：開発用ファイル。ゲーム部分のみ。
 S2G_Productファイル：リリース用ファイル。タイトルからクリアシーンまで、作品として遊べる。  
 実行ファイル：S2G_Product/App/S2G_Product.exe  
 
+### 操作方法  
+対応インタフェース：キーボード  
+移動：カーソルキー  
+ゲーム終了：Escキー
+？：スペースキー    
+
 ## 開発環境
 PC：Windows 10 Pro、Intel Core i7-6700K  
 IDE：Visual Studio 2022  
