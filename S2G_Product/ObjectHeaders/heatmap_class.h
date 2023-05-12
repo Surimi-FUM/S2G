@@ -160,7 +160,7 @@ public:
 		heatmap.at(y).at(x) = temp;
 		heat_pos = std::make_pair(y, x);
 		heat_queue.push(heat_pos);
-		visitted_cell.at(x * y) = true;   // 2進数で処理すれば軽量化できる
+		visitted_cell.at(x * y) = true;   // 2進数で処理すれば軽量化できるyo
 
 		// ヒートマップ更新処理
 		while (!heat_queue.empty()) {
@@ -177,30 +177,16 @@ public:
 				break;
 
 			// 取り出したマスから移動可能なマスを探索する
-			// 縦・横の周囲4マスを探索する
-			next_x = x + 1;
-			next_y = y;
-			// 探索済みのマスでないなら処理を行う
-			if (!visitted_cell.at(next_x * next_y)) {
-				UpdateHeatMap(next_x, next_y, temp - search_dis, heat_queue, visitted_cell);
-			}
+			std::vector<int> dx = { 0, 0, 1, -1};
+			std::vector<int> dy = { 1, -1, 0, 0};
 
-			next_x = x - 1;
-			next_y = y;
-			if (!visitted_cell.at(next_x * next_y)) {
-				UpdateHeatMap(next_x, next_y, temp - search_dis, heat_queue, visitted_cell);
-			}
-
-			next_x = x;
-			next_y = y + 1;
-			if (!visitted_cell.at(next_x * next_y)) {
-				UpdateHeatMap(next_x, next_y, temp - search_dis, heat_queue, visitted_cell);
-			}
-
-			next_x = x;
-			next_y = y - 1;
-			if (!visitted_cell.at(next_x * next_y)) {
-				UpdateHeatMap(next_x, next_y, temp - search_dis, heat_queue, visitted_cell);
+			for (int i = 0; i < dx.size(); i++) {
+				next_x = x + dx[i];
+				next_y = y + dy[i];
+				// 探索済みのマスでないなら処理を行う
+				if (!visitted_cell.at(next_x * next_y)) {
+					UpdateHeatMap(next_x, next_y, temp - search_dis, heat_queue, visitted_cell);
+				}
 			}
 		}
 	}
