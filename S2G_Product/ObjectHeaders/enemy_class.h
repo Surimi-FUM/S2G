@@ -21,8 +21,8 @@ class Enemy {
 	bool flag_chase = false;
 
 	// 移動可能判定
-	bool CheckMove(int cell, int wall) {
-		if (cell == wall)
+	bool CheckMove(int cell, int target_cell) {
+		if (cell == target_cell)
 			return true;
 		return false;
 	}
@@ -161,15 +161,16 @@ public:
 
 				next_y = y + add_y;
 				next_x = x + add_x;
-
 				std::pair<int32, int32> next_pos = std::make_pair(next_y, next_x);
-				if (!CheckMove(map.GetMapCell(next_pos), map.GetMapVal("#")))
+
+				// 壁および負の値のマスでなければ移動する
+				if (!CheckMove(map.GetMapCell(next_pos), map.GetMapVal("#")) && heatmap.GetCellTemp(next_pos) > 0)
 					break;
 			}
 		}
 		else {
 			// Player追跡時は移動速度を速くする
-			spawn_time = 0.5;
+			spawn_time = 0.2;
 			flag_chase = true;
 		}
 		// 座標を移動先の座標に更新する
