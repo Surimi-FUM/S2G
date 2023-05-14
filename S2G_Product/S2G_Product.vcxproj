@@ -149,24 +149,26 @@
     <Image Include="App\example\texture\wood.jpg" />
     <Image Include="App\example\windmill.png" />
     <Image Include="App\icon.ico" />
-    <Image Include="App\maps\mapchip\base.png">
+    <Image Include="App\resource\maps\mapchip\base.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="App\pictures\b_cat.png" />
-    <Image Include="App\pictures\b_enemy.png" />
-    <Image Include="App\pictures\clear_image.png">
+    <Image Include="App\resource\pictures\b_cat.png" />
+    <Image Include="App\resource\pictures\b_enemy.png" />
+    <Image Include="App\resource\pictures\clear_image.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="App\pictures\dark_siv3dkun.png">
+    <Image Include="App\resource\pictures\dark_siv3dkun.png">
       <DeploymentContent>true</DeploymentContent>
     </Image>
-    <Image Include="App\pictures\pipo-bg005a.jpg">
+    <Image Include="App\resource\pictures\pipo-bg005a.jpg">
       <DeploymentContent>true</DeploymentContent>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </Image>
-    <Image Include="App\pictures\pipo-pic001.jpg">
+    <Image Include="App\resource\pictures\pipo-pic001.jpg">
       <DeploymentContent>true</DeploymentContent>
     </Image>
+    <Image Include="App\resource\pictures\siv3d-kun-16.png" />
+    <Image Include="App\resource\pictures\siv3d-kun.png" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="App\Resource.rc" />
@@ -188,11 +190,12 @@
     <Text Include="App\example\txt\kr.txt" />
     <Text Include="App\example\txt\sc.txt" />
     <Text Include="App\example\video\river.txt" />
+    <Text Include="App\resource\pictures\siv3d-kun-16.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
     <None Include="App\dll\soundtouch\SoundTouch_x64.dll" />
-    <None Include="App\move_rule\enemy_move1.csv">
+    <None Include="App\resource\move_rule\enemy_move1.csv">
       <DeploymentContent>true</DeploymentContent>
     </None>
     <None Include="App\engine\font\fontawesome\fontawesome-brands.otf.zstdcmp" />
@@ -320,7 +323,7 @@
     <None Include="App\example\toml\config.toml" />
     <None Include="App\example\toml\test.toml" />
     <None Include="App\example\zip\zip_test.zip" />
-    <None Include="App\maps\csv\map1.csv">
+    <None Include="App\resource\maps\csv\map1.csv">
       <DeploymentContent>true</DeploymentContent>
     </None>
   </ItemGroup>
@@ -328,13 +331,13 @@
     <Media Include="App\example\shot.mp3" />
     <Media Include="App\example\test.mp3" />
     <Media Include="App\example\video\river.mp4" />
-    <Media Include="App\music\MusMus-BGM-104.mp3">
+    <Media Include="App\resource\music\MusMus-BGM-104.mp3">
       <DeploymentContent>true</DeploymentContent>
     </Media>
-    <Media Include="App\music\MusMus-BGM-112.mp3">
+    <Media Include="App\resource\music\MusMus-BGM-112.mp3">
       <DeploymentContent>true</DeploymentContent>
     </Media>
-    <Media Include="App\music\MusMus-BGM-157.mp3">
+    <Media Include="App\resource\music\MusMus-BGM-157.mp3">
       <DeploymentContent>true</DeploymentContent>
     </Media>
   </ItemGroup>

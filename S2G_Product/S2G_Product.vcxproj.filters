@@ -233,25 +233,31 @@
     <Image Include="App\example\obj\siv3d-kun-eye.png">
       <Filter>Resource Files\example\obj</Filter>
     </Image>
-    <Image Include="App\pictures\b_cat.png">
+    <Image Include="App\resource\pictures\b_cat.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="App\pictures\b_enemy.png">
+    <Image Include="App\resource\pictures\b_enemy.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="App\pictures\dark_siv3dkun.png">
+    <Image Include="App\resource\pictures\dark_siv3dkun.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="App\maps\mapchip\base.png">
+    <Image Include="App\resource\maps\mapchip\base.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="App\pictures\clear_image.png">
+    <Image Include="App\resource\pictures\clear_image.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="App\pictures\pipo-bg005a.jpg">
+    <Image Include="App\resource\pictures\pipo-bg005a.jpg">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="App\pictures\pipo-pic001.jpg">
+    <Image Include="App\resource\pictures\pipo-pic001.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="App\resource\pictures\siv3d-kun.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="App\resource\pictures\siv3d-kun-16.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
@@ -309,6 +315,7 @@
     <Text Include="App\example\LICENSE.txt">
       <Filter>Resource Files\example</Filter>
     </Text>
+    <Text Include="App\resource\pictures\siv3d-kun-16.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App\dll\soundtouch\SoundTouch_x64.dll">
@@ -768,8 +775,8 @@
     <None Include="App\engine\font\min\siv3d-min.woff">
       <Filter>Resource Files\engine\font\min</Filter>
     </None>
-    <None Include="App\move_rule\enemy_move1.csv" />
-    <None Include="App\maps\csv\map1.csv" />
+    <None Include="App\resource\move_rule\enemy_move1.csv" />
+    <None Include="App\resource\maps\csv\map1.csv" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="App\example\test.mp3">
@@ -781,9 +788,9 @@
     <Media Include="App\example\shot.mp3">
       <Filter>Resource Files\example</Filter>
     </Media>
-    <Media Include="App\music\MusMus-BGM-104.mp3" />
-    <Media Include="App\music\MusMus-BGM-112.mp3" />
-    <Media Include="App\music\MusMus-BGM-157.mp3" />
+    <Media Include="App\resource\music\MusMus-BGM-104.mp3" />
+    <Media Include="App\resource\music\MusMus-BGM-112.mp3" />
+    <Media Include="App\resource\music\MusMus-BGM-157.mp3" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="App\example\font\DotGothic16\DotGothic16-Regular.ttf">

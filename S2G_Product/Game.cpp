@@ -30,11 +30,11 @@ Game::Game(const InitData& init)
 	// マップチップ用テクスチャ
 	mapchip = MapChip(chip_path);
 
-	chip_path = "example/spritesheet/siv3d-kun-16.png";
+	chip_path = "resource/pictures/siv3d-kun-16.png";
 	mapchip.SetChip(chip_path, "p");
-	chip_path = "pictures/dark_siv3dkun.png";
+	chip_path = "resource/pictures/dark_siv3dkun.png";
 	mapchip.SetChip(chip_path, "e");
-	chip_path = "pictures/b_enemy.png";
+	chip_path = "resource/pictures/b_enemy.png";
 	mapchip.SetChip(chip_path, "e_q");
 
 	// ヒートマップ

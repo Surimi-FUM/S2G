@@ -44,7 +44,7 @@ void Main()
 	std::string chip_path = "maps/mapchip/base.png";
 	MapChip mapchip = MapChip(chip_path);
 
-	chip_path = "example/spritesheet/siv3d-kun-16.png";
+	chip_path = "pictures/siv3d-kun-16.png";
 	mapchip.SetChip(chip_path, "p");
 
 	chip_path = "pictures/dark_siv3dkun.png";

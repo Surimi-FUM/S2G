@@ -7,15 +7,15 @@
 // タイトルシーン
 class Title : public App::Scene
 {
-	Texture player{ U"example/spritesheet/siv3d-kun-16.png" };
-	Texture s{ U"maps/mapchip/base.png" };
-	Texture g{ U"maps/mapchip/base.png" };
-	const Texture image{ U"pictures/pipo-bg005a.jpg" };
+	Texture player{ U"resource/pictures/siv3d-kun-16.png" };
+	Texture s{ U"resource/maps/mapchip/base.png" };
+	Texture g{ U"resource/maps/mapchip/base.png" };
+	const Texture image{ U"resource/pictures/pipo-bg005a.jpg" };
 
 	// 基本サイズ 25 のフォントを作成
 	const Font font{ 25 };
 
-	const Audio audio{ U"music/MusMus-BGM-157.mp3", Loop::Yes };
+	const Audio audio{ U"resource/music/MusMus-BGM-157.mp3", Loop::Yes };
 
 public:
 
