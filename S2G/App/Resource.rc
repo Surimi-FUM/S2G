@@ -85,6 +85,7 @@ Resource(engine/texture/box-shadow/8.png)
 //
 //	Fonts
 //
+/*
 Resource(engine/font/mplus/mplus-1p-thin.ttf.zstdcmp)
 Resource(engine/font/mplus/mplus-1p-light.ttf.zstdcmp)
 Resource(engine/font/mplus/mplus-1p-regular.ttf.zstdcmp)
@@ -93,13 +94,15 @@ Resource(engine/font/mplus/mplus-1p-bold.ttf.zstdcmp)
 Resource(engine/font/mplus/mplus-1p-heavy.ttf.zstdcmp)
 Resource(engine/font/mplus/mplus-1p-black.ttf.zstdcmp)
 Resource(engine/font/noto-cjk/NotoSansCJK-Regular.ttc.zstdcmp)
+*/
 //Resource(engine/font/noto-cjk/NotoSansJP-Regular.otf.zstdcmp)
 
 //
 //	Emoji Fonts
 //
-Resource(engine/font/noto-emoji/NotoColorEmoji.ttf.zstdcmp)
-Resource(engine/font/noto-emoji/NotoEmoji-Regular.ttf.zstdcmp)
+//Resource(engine/font/noto-emoji/NotoColorEmoji.ttf.zstdcmp)
+//Resource(engine/font/noto-emoji/NotoEmoji-Regular.ttf.zstdcmp)
+Resource(example/font/RocknRoll/RocknRollOne-Regular.ttf)
 
 //
 //	Icons
@@ -111,14 +114,27 @@ Resource(engine/font/materialdesignicons/materialdesignicons-webfont.ttf.zstdcmp
 //
 //	Sound Font
 //
-Resource(engine/soundfont/GMGSx.sf2.zstdcmp)
+//Resource(engine/soundfont/GMGSx.sf2.zstdcmp)
 
 //////////////////////////////////////////////////////
 //
 //	Siv3D App Resources (Your application resources here)
 //
 //////////////////////////////////////////////////////
-
+Resource(resource\pictures\siv3d-kun.png)
+Resource(resource\pictures\siv3d-kun-16.png)
+Resource(resource/pictures/b_cat.png)
+Resource(resource/pictures/b_enemy.png)
+Resource(resource/pictures/clear_image.png)
+Resource(resource/pictures/dark_siv3dkun.png)
+Resource(resource/pictures/pipo-bg005a.jpg)
+Resource(resource/pictures/pipo-pic001.jpg)
+Resource(resource/music/MusMus-BGM-104.mp3)
+Resource(resource/music/MusMus-BGM-112.mp3)
+Resource(resource/music/MusMus-BGM-157.mp3)
+Resource(resource/move_rule\enemy_move1.csv)
+Resource(resource\maps\mapchip\base.png)
+Resource(resource\maps\csv\map1.csv)
 
 
 /* examples 
