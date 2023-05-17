@@ -25,6 +25,41 @@ void Title::update()
 		// ライセンス情報を表示
 		LicenseManager::ShowInBrowser();
 	}
+
+	//　プレイヤ移動処理
+	if (KeyLeft.down()) {
+		p_pos_x -= 10;
+		if (p_pos_x <= 30)
+		{
+			p_pos_x = 30;
+		}
+	}
+
+	if (KeyRight.down()) {
+		p_pos_x += 10;
+
+		if (p_pos_x >= 620)
+		{
+			p_pos_x = 620;
+		}
+	}
+
+	if (KeyUp.down()) {
+		p_pos_y -= 10;
+		if (p_pos_y <= 40)
+		{
+			p_pos_y = 40;
+		}
+	}
+
+	if (KeyDown.down()) {
+		p_pos_y += 10;
+
+		if (p_pos_y >= 460)
+		{
+			p_pos_y = 460;
+		}
+	}
 }
 
 //　描画関数　メイン関数のWhile文内で周期的に呼ばれる
@@ -36,17 +71,14 @@ void Title::draw() const
 
 	image.scaled(1.5).draw();
 
-	FontAsset(U"TitleFont")(U"S  2  G").drawAt(320, 100);
+	tittle_font(U"S  2  G").drawAt(320, 100);
 
 	s(7 * 16, 13 * 15.95, 16).scaled(3.0).drawAt(200, 250);
 	g(3 * 16, 167 * 16, 16).scaled(3.0).drawAt(440, 250);
 
-	player(1 * 22, 0 * 28 + 7, 20, 28).scaled(3.0).drawAt(320, 190);
+	player(1 * 22, 0 * 28 + 7, 20, 28).scaled(3.0).drawAt(p_pos_x, p_pos_y);
 
 	Line{ 250, 250, 390, 250 }.drawArrow(10, Vec2{ 20, 20 }, Palette::White);
 
-	font(U"ゲームを始める：[S] \n 終了：[ESC] \n ライセンス：[L]").drawAt(320, 370);
-
-	// 音量の調整は倍率を指定する：2倍=2.0, 半減＝0.5　
-	//　audio.setVolume(0.5);
+	font(U"操作：[←][→][↑][↓] \n ゲームを始める：[S] \n 終了：[ESC] \n ライセンス：[L]").drawAt(320, 370);
 }
