@@ -21,6 +21,7 @@ class Game : public App::Scene{
 	std::pair<int, int> enemy_pos;
 	Enemy enemy_1;
 	Enemy enemy_2;
+	Enemy enemy_3;
 
 	// /相互関与用クラス
 	GameMaster game_master;

@@ -14,6 +14,7 @@ Game::Game(const InitData& init)
 	map = Map(csv_path);
 	// Player
 	player_pos = map.GetPos("start");
+	player_pos.second += 1;
 	player = Player(player_pos);
 	// Enemy
 	enemy_pos = map.GetPos("enemy", 0);
@@ -25,6 +26,10 @@ Game::Game(const InitData& init)
 	enemy_poses["A_2"] = enemy_pos;
 	enemy_2 = Enemy(enemy_pos);
 	enemy_2.SetMoveQueue(enemy_move_path, "2");
+
+	enemy_pos = map.GetPos("enemy", 2);
+	enemy_poses["A_3"] = enemy_pos;
+	enemy_3 = Enemy(enemy_pos);
 	// 相互関与用インスタンス
 	game_master = GameMaster();
 	// マップチップ用テクスチャ
@@ -47,6 +52,15 @@ Game::Game(const InitData& init)
 	//　音楽
 	audio.play();
 	audio.setVolume(0.5);
+}
+
+
+void Collision(HeatMap &heatmap, Map &map, Player &player, std::pair<int, int> &player_pos) {
+	heatmap.RestHeatMap();
+	heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
+	heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
+	player_pos = map.GetPos("start");
+	player.SetPos(player_pos);
 }
 
 //　更新関数
@@ -83,6 +97,7 @@ void Game::update()
 	// 蓄積時間が出現間隔を超えたら敵が行動する
 	enemy_1.AddAccumulator(Scene::DeltaTime());
 	enemy_2.AddAccumulator(Scene::DeltaTime());
+	enemy_3.AddAccumulator(Scene::DeltaTime());
 
 	//　敵1　処理
 	if (enemy_1.CanMove())
@@ -91,11 +106,7 @@ void Game::update()
 
 		// プレイヤとの衝突判定
 		if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
-			heatmap.RestHeatMap();
-			heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
-			heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
-			player_pos = map.GetPos("start");
-			player.SetPos(player_pos);
+			Collision(heatmap, map, player, player_pos);
 		}
 
 		//　移動処理
@@ -105,11 +116,7 @@ void Game::update()
 
 		// プレイヤとの衝突判定
 		if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
-			heatmap.RestHeatMap();
-			heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
-			heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
-			player_pos = map.GetPos("start");
-			player.SetPos(player_pos);
+			Collision(heatmap, map, player, player_pos);
 		}
 	}
 
@@ -119,11 +126,7 @@ void Game::update()
 
 		//　プレイヤとの衝突判定
 		if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
-			heatmap.RestHeatMap();
-			heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
-			heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
-			player_pos = map.GetPos("start");
-			player.SetPos(player_pos);
+			Collision(heatmap, map, player, player_pos);
 		}
 
 		// 移動処理
@@ -133,11 +136,27 @@ void Game::update()
 
 		//　プレイヤとの衝突判定
 		if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
-			heatmap.RestHeatMap();
-			heatmap.CalcHeatMap(map.GetPos("start"), heatmap.GetTempVal("s"), 3);
-			heatmap.CalcHeatMap(map.GetPos("goal"), heatmap.GetTempVal("g"), 3);
-			player_pos = map.GetPos("start");
-			player.SetPos(player_pos);
+			Collision(heatmap, map, player, player_pos);
+		}
+	}
+
+	if (enemy_3.CanMove())
+	{
+		enemy_pos = enemy_3.GetPos();
+
+		//　プレイヤとの衝突判定
+		if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
+			Collision(heatmap, map, player, player_pos);
+		}
+
+		// 移動処理
+		enemy_3.MoveHeatMap(heatmap, map);
+		enemy_pos = enemy_3.GetPos();
+		enemy_poses["A_3"] = enemy_pos;
+
+		//　プレイヤとの衝突判定
+		if (game_master.ChceckCollisionP_E(player_pos, enemy_poses)) {
+			Collision(heatmap, map, player, player_pos);
 		}
 	}
 
@@ -216,13 +235,21 @@ void Game::draw() const
 			if (i == 0) {
 				mapchip.GetChip_Enemy_Q(0, 0).scaled(0.6).draw(pos);
 			}
-			else {
+			else if(i == 1) {
 				if (enemy_2.GetChaseFlag()) {
 					mapchip.GetChip_Enemy(0, 0).draw(pos, ColorF{ 1.0, 0.0, 0.0 });
 				}
-				else
+				else {
 					mapchip.GetChip_Enemy(0, 0).draw(pos);
-
+				}
+			}
+			else {
+				if (enemy_3.GetChaseFlag()) {
+					mapchip.GetChip_Enemy(0, 0).draw(pos, ColorF{ 1.0, 0.0, 0.0 });
+				}
+				else {
+					mapchip.GetChip_Enemy(0, 0).draw(pos);
+				}
 			}
 			i++;
 		}

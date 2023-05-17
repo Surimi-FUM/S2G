@@ -790,23 +790,23 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="map_class.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="player_class.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="enemy_class.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameMaster.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mapchip_class.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="heatmap_class.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="map_class.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mapchip_class.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="player_class.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

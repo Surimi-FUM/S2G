@@ -60,7 +60,7 @@ class HeatMap {
 	}
 
 	// あるマスの温度情報を更新する
-	void UpdateHeatMap(int32 x, int32 y, int32 temp, std::queue<std::pair<int32, int32>>& h_queue, std::vector<bool>& v_cell) {
+	void UpdateHeatMap(int32 x, int32 y, int32 temp, std::queue<std::pair<int32, int32>>& h_queue) {
 		std::pair<int32, int32> next_pos;
 		int32 cold_temp = -1, max_cold = 0;
 
@@ -70,7 +70,6 @@ class HeatMap {
 		if (heatmap.at(y).at(x) != temp_map.at("#")) {
 			next_pos = std::make_pair(y, x);
 			h_queue.push(next_pos);
-			v_cell.at(x * y) = true;
 			heatmap.at(y).at(x) = temp;
 
 			ColdHeatMap(x, y);
@@ -154,13 +153,13 @@ public:
 
 		// 幅優先探索
 		//　初期条件
-		if (distance > 5)  // 熱源が影響を与えるユークリッド距離は5を最大値とする
+		if (distance > 10)  // 熱源が影響を与えるユークリッド距離は5を最大値とする
 			distance = 5;
 		std::tie(y, x) = pos;
 		heatmap.at(y).at(x) = temp;
 		heat_pos = std::make_pair(y, x);
 		heat_queue.push(heat_pos);
-		visitted_cell.at(x * y) = true;   // 2進数で処理すれば軽量化できるyo
+		visitted_cell.at((x * map_size.first) + y) = true;
 
 		// ヒートマップ更新処理
 		while (!heat_queue.empty()) {
@@ -169,8 +168,8 @@ public:
 			heat_queue.pop();
 			std::tie(y, x) = heat_pos;
 
-			num = std::pow((y - pos.first), 2) + std::pow((x - pos.second), 2);
-			search_dis = std::sqrt(num);
+			// マンハッタン距離計算
+			search_dis = std::abs(y - pos.first) + std::abs(x - pos.second);
 
 			//　探索限界距離まで来たら更新を終える
 			if (search_dis >= distance)
@@ -184,8 +183,9 @@ public:
 				next_x = x + dx[i];
 				next_y = y + dy[i];
 				// 探索済みのマスでないなら処理を行う
-				if (!visitted_cell.at(next_x * next_y)) {
-					UpdateHeatMap(next_x, next_y, temp - search_dis, heat_queue, visitted_cell);
+				if (!visitted_cell.at((next_x * map_size.first) + next_y)) {
+					visitted_cell.at((next_x * map_size.first) + next_y) = true;
+					UpdateHeatMap(next_x, next_y, temp - search_dis, heat_queue);
 				}
 			}
 		}
