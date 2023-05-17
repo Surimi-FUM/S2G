@@ -153,7 +153,7 @@ public:
 
 		// 幅優先探索
 		//　初期条件
-		if (distance > 10)  // 熱源が影響を与えるユークリッド距離は5を最大値とする
+		if (distance > 5)  // 熱源が影響を与えるユークリッド距離は5を最大値とする
 			distance = 5;
 		std::tie(y, x) = pos;
 		heatmap.at(y).at(x) = temp;
